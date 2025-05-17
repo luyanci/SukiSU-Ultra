@@ -227,7 +227,7 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          git apply 0001-manager.patch
+          git apply ../0001-manager.patch
           {
             echo 'org.gradle.parallel=true'
             echo 'org.gradle.vfs.watch=true'
