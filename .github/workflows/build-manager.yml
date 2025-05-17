@@ -246,6 +246,8 @@ jobs:
       - name: Build with Gradle
         run: |
           git reset --hard
+          git clean -f
+          rm ./app/build/outputs/apk/release/*.apk
           {
             echo 'org.gradle.parallel=true'
             echo 'org.gradle.vfs.watch=true'
