@@ -20,7 +20,7 @@ on:
       build_lkm:
         required: true
         type: choice
-        default: "false"
+        default: "auto"
         options:
           - "true"
           - "false"
@@ -29,7 +29,7 @@ on:
       upload_lkm:
         required: true
         type: boolean
-        default: false
+        default: true
         description: "Whether to upload lkm"
 jobs:
   check-build-lkm:
