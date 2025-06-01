@@ -147,7 +147,7 @@ fun MoreSettingsScreen(navigator: DestinationsNavigator) {
 
         val commonLocales = listOf(
             Locale.forLanguageTag("en"), // 英语
-            Locale.forLanguageTag("zh-CN"), // 简体中文
+            // Locale.forLanguageTag("zh-CN"), // 简体中文
             Locale.forLanguageTag("zh-HK"), // 繁体中文(香港)
             Locale.forLanguageTag("zh-TW"), // 繁体中文(台湾)
             Locale.forLanguageTag("ja"), // 日语
