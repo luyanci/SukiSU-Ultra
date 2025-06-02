@@ -33,15 +33,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Android
-import androidx.compose.material.icons.filled.Archive
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Memory
-import androidx.compose.material.icons.filled.PhoneAndroid
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.SettingsSuggest
-import androidx.compose.material.icons.filled.Storage
+import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.TaskAlt
 import androidx.compose.material.icons.outlined.Warning
@@ -55,6 +47,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -73,7 +66,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
@@ -96,10 +88,6 @@ import com.sukisu.ultra.ui.theme.CardConfig.cardElevation
 import com.sukisu.ultra.ui.theme.getCardColors
 import com.sukisu.ultra.ui.theme.getCardElevation
 import com.sukisu.ultra.ui.util.checkNewVersion
-import com.sukisu.ultra.ui.util.getKpmModuleCount
-import com.sukisu.ultra.ui.util.getKpmVersion
-import com.sukisu.ultra.ui.util.getModuleCount
-import com.sukisu.ultra.ui.util.getSuperuserCount
 import com.sukisu.ultra.ui.util.module.LatestVersionInfo
 import com.sukisu.ultra.ui.util.reboot
 import com.sukisu.ultra.ui.viewmodel.HomeViewModel
@@ -138,8 +126,6 @@ fun HomeScreen(navigator: DestinationsNavigator) {
     Scaffold(
         topBar = {
             TopBar(
-                kernelVersion = viewModel.systemStatus.kernelVersion,
-                onInstallClick = { navigator.navigate(InstallScreenDestination) },
                 scrollBehavior = scrollBehavior
             )
         },
@@ -200,8 +186,6 @@ fun HomeScreen(navigator: DestinationsNavigator) {
                 InfoCard(
                     systemInfo = viewModel.systemInfo,
                     isSimpleMode = viewModel.isSimpleMode,
-                    isHideVersion = viewModel.isHideVersion,
-                    isHideOtherInfo = viewModel.isHideOtherInfo,
                     isHideSusfsStatus = viewModel.isHideSusfsStatus,
                     showKpmInfo = viewModel.showKpmInfo,
                     lkmMode = viewModel.systemStatus.lkmMode,
@@ -272,15 +256,13 @@ fun UpdateCard() {
 @Composable
 fun RebootDropdownItem(@StringRes id: Int, reason: String = "") {
     DropdownMenuItem(
-        text = {Text(stringResource(id))}, 
+        text = {Text(stringResource(id))},
         onClick = {reboot(reason)})
-    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar(
-    kernelVersion: KernelVersion,
-    onInstallClick: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior? = null
 ) {
     val colorScheme = MaterialTheme.colorScheme
@@ -308,7 +290,7 @@ private fun TopBar(
                     showDropdown = true
                 }) {
                     Icon(
-                        imageVector = Icons.Filled.Refresh,
+                        imageVector = Icons.Filled.PowerSettingsNew,
                         contentDescription = stringResource(id = R.string.reboot)
                     )
 
@@ -353,7 +335,7 @@ private fun StatusCard(
                         onClickInstall()
                     }
                 }
-                .padding(24.dp),
+                .padding(32.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             when {
@@ -374,9 +356,8 @@ private fun StatusCard(
                     Icon(
                         Icons.Outlined.TaskAlt,
                         contentDescription = stringResource(R.string.home_working),
-                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
-                            .size(28.dp)
+                            .size(32.dp)
                             .padding(
                                 horizontal = 4.dp
                             ),
@@ -389,8 +370,7 @@ private fun StatusCard(
                         ) {
                             Text(
                                 text = workingModeText,
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.primary,
+                                style = MaterialTheme.typography.titleMedium
                             )
 
                             Spacer(Modifier.width(8.dp))
@@ -421,11 +401,11 @@ private fun StatusCard(
                                     Text(
                                         text = Os.uname().machine,
                                         style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onPrimary
                                         modifier = Modifier.padding(
                                             horizontal = 6.dp,
                                             vertical = 2.dp
                                         ),
-                                        color = MaterialTheme.colorScheme.onPrimary
                                     )
                                 }
                             }
@@ -438,8 +418,7 @@ private fun StatusCard(
                             Spacer(Modifier.height(4.dp))
                             Text(
                                 text = stringResource(R.string.home_working_version, systemStatus.ksuVersion),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.secondary,
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
                     }
@@ -451,7 +430,7 @@ private fun StatusCard(
                         contentDescription = stringResource(R.string.home_not_installed),
                         tint = MaterialTheme.colorScheme.error,
                         modifier = Modifier
-                            .size(28.dp)
+                            .size(32.dp)
                             .padding(
                                 horizontal = 4.dp
                             ),
@@ -479,7 +458,7 @@ private fun StatusCard(
                         contentDescription = stringResource(R.string.home_unsupported),
                         tint = MaterialTheme.colorScheme.error,
                         modifier = Modifier
-                            .size(28.dp)
+                            .size(32.dp)
                             .padding(
                                 horizontal = 4.dp
                             ),
@@ -636,15 +615,17 @@ fun DonateCard() {
 private fun InfoCard(
     systemInfo: HomeViewModel.SystemInfo,
     isSimpleMode: Boolean,
-    isHideVersion: Boolean,
-    isHideOtherInfo: Boolean,
     isHideSusfsStatus: Boolean,
     showKpmInfo: Boolean,
     lkmMode: Boolean?
 ) {
-    ElevatedCard(
-        colors = getCardColors(MaterialTheme.colorScheme.surfaceContainer),
-        elevation = getCardElevation(),
+    OutlinedCard(
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = cardAlpha),
+        ),
+        border = CardDefaults.outlinedCardBorder(
+            enabled = !CardConfig.isCustomBackgroundEnabled
+        ),
     ) {
         Column(
             modifier = Modifier
@@ -655,7 +636,6 @@ private fun InfoCard(
             fun InfoCardItem(
                 label: String,
                 content: String,
-                icon: ImageVector = Icons.Default.Info
             ) {
                 Row(
                     verticalAlignment = Alignment.Top,
@@ -663,15 +643,7 @@ private fun InfoCard(
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
                 ) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = label,
-                        modifier = Modifier
-                            .size(28.dp)
-                            .padding(vertical = 4.dp),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -692,34 +664,29 @@ private fun InfoCard(
 
             InfoCardItem(
                 stringResource(R.string.home_kernel),
-                systemInfo.kernelRelease,
-                icon = Icons.Default.Memory,
+                systemInfo.kernelRelease
             )
 
             if (!isSimpleMode) {
                 InfoCardItem(
                     stringResource(R.string.home_android_version),
                     systemInfo.androidVersion,
-                    icon = Icons.Default.Android,
                 )
             }
 
             InfoCardItem(
                 stringResource(R.string.home_device_model),
                 systemInfo.deviceModel,
-                icon = Icons.Default.PhoneAndroid,
             )
 
             InfoCardItem(
                 stringResource(R.string.home_manager_version),
                 "${systemInfo.managerVersion.first} (${systemInfo.managerVersion.second.toInt()})",
-                icon = Icons.Default.SettingsSuggest,
             )
 
             InfoCardItem(
                 stringResource(R.string.home_selinux_status),
                 systemInfo.seLinuxStatus,
-                icon = Icons.Default.Security,
             )
 
             if (!isSimpleMode) {
@@ -740,7 +707,6 @@ private fun InfoCard(
                         InfoCardItem(
                             stringResource(R.string.home_kpm_version),
                             displayVersion,
-                            icon = Icons.Default.Archive
                         )
                     }
                 }
@@ -762,8 +728,7 @@ private fun InfoCard(
 
                         InfoCardItem(
                             stringResource(R.string.home_susfs_version),
-                            infoText,
-                            icon = Icons.Default.Storage
+                            infoText
                         )
                     }
                 }

@@ -324,6 +324,9 @@ private fun BottomBar(navController: NavHostController) {
     val showKpmInfo = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
         .getBoolean("show_kpm_info", true)
 
+    val isHideOtherInfo = LocalContext.current.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        .getBoolean("is_hide_other_info", false)
+
     NavigationBar(
         modifier = Modifier.windowInsetsPadding(
             WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)
@@ -356,7 +359,7 @@ private fun BottomBar(navController: NavHostController) {
                         icon = {
                             BadgedBox(
                                 badge = {
-                                    if (kpmModuleCount > 0) {
+                                    if (kpmModuleCount > 0 && !isHideOtherInfo) {
                                         Badge(
                                             containerColor = MaterialTheme.colorScheme.secondary
                                         ) {
@@ -400,7 +403,7 @@ private fun BottomBar(navController: NavHostController) {
                     icon = {
                         BadgedBox(
                             badge = {
-                                if (superuserCount > 0) {
+                                if (superuserCount > 0 && !isHideOtherInfo) {
                                     Badge(
                                         containerColor = MaterialTheme.colorScheme.secondary
                                     ) {
@@ -443,7 +446,7 @@ private fun BottomBar(navController: NavHostController) {
                     icon = {
                         BadgedBox(
                             badge = {
-                                if (moduleCount > 0) {
+                                if (moduleCount > 0 && !isHideOtherInfo) {
                                     Badge(
                                         containerColor = MaterialTheme.colorScheme.secondary                              ) {
                                         Text(
