@@ -634,7 +634,7 @@ static void do_stop_input_hook(struct work_struct *work)
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 14, 0)
 #include "objsec.h" // task_security_struct
-bool is_ksu_transition(const struct task_security_struct *old_tsec,
+bool __maybe_unused is_ksu_transition(const struct task_security_struct *old_tsec,
 			const struct task_security_struct *new_tsec)
 {
 	static u32 ksu_sid;
