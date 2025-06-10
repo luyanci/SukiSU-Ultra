@@ -217,18 +217,23 @@ void ksu_escape_to_root(void)
 {
 	struct cred *cred;
 
+	if (current_euid().val == 0) {
+		pr_warn("Already root, don't escape!\n");
+		return;
+	}
+
 	rcu_read_lock();
 
 	do {
 		cred = (struct cred *)__task_cred((current));
-		BUG_ON(!cred);
+		if (!cred) {
+			pr_err("%s: cred is NULL! bailing out..\n", __func__);
+			rcu_read_unlock();
+			return;
+		}
 	} while (!get_cred_rcu(cred));
 
-	if (cred->euid.val == 0) {
-		pr_warn("Already root, don't escape!\n");
-		rcu_read_unlock();
-		return;
-	}
+	rcu_read_unlock();
 
 	struct root_profile *profile = ksu_get_root_profile(cred->uid.val);
 
@@ -259,8 +264,8 @@ void ksu_escape_to_root(void)
 	       sizeof(cred->cap_bset));
 
 	setup_groups(profile, cred);
-	
-	rcu_read_unlock();
+
+	put_cred(cred); // - release here - include/linux/cred.h
 
 	// Refer to kernel/seccomp.c: seccomp_set_mode_strict
 	// When disabling Seccomp, ensure that current->sighand->siglock is held during the operation.
@@ -989,7 +994,7 @@ static void ksu_sys_umount(const char *mnt, int flags)
 	char __user *usermnt = (char __user *)mnt;
 	mm_segment_t old_fs;
 	int ret; // although asmlinkage long
-	
+
 	old_fs = get_fs();
 	set_fs(KERNEL_DS);
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 17, 0)
@@ -1049,6 +1054,8 @@ void susfs_try_umount_all(uid_t uid) {
 	// - For '/data/adb/modules' we pass 'false' here because it is a loop device that we can't determine whether 
 	//   its dev_name is KSU or not, and it is safe to just umount it if it is really a mountpoint
 	ksu_try_umount("/data/adb/modules", false, MNT_DETACH, uid);
+	// - For '/data/adb/kpm' we pass 'false' here because it is a loop device that we can't determine whether
+	//   its dev_name is KSU or not, and it is safe to just umount it if it is really a mountpoint
 	ksu_try_umount("/data/adb/kpm", false, MNT_DETACH, uid);
 	/* For both Legacy KSU and Magic Mount KSU */
 	ksu_try_umount("/debug_ramdisk", true, MNT_DETACH, uid);
@@ -1144,10 +1151,14 @@ out_ksu_try_umount:
 	// fixme: use `collect_mounts` and `iterate_mount` to iterate all mountpoint and
 	// filter the mountpoint whose target is `/data/adb`
 	ksu_try_umount("/system", true, 0);
-	ksu_try_umount("/system_ext", true, 0);
 	ksu_try_umount("/vendor", true, 0);
 	ksu_try_umount("/product", true, 0);
+	ksu_try_umount("/system_ext", true, 0);
+	
+	// try umount modules path
 	ksu_try_umount("/data/adb/modules", false, MNT_DETACH);
+
+	// try umount kpm path
 	ksu_try_umount("/data/adb/kpm", false, MNT_DETACH);
 
 	// try umount ksu temp path
