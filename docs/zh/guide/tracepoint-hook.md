@@ -7,9 +7,7 @@
 该 Hook 理论上相比于 Kprobes Hook ，性能开销更小，但次于 Manual Hook / Syscall Hook
 
 > [!NOTE]
-> 本教程参考了 [backslashxx/KernelSU#5](https://github.com/backslashxx/KernelSU/issues/5) 的 syscall hook v1.4版本 钩子
-> 
-> 以及 原版KSU的 [Manual Hook](https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#manually-modify-the-kernel-source)
+> 本教程参考了 [backslashxx/KernelSU#5](https://github.com/backslashxx/KernelSU/issues/5) 的 syscall hook v1.4版本 钩子 以及 原版KSU的 [Manual Hook](https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#manually-modify-the-kernel-source)
 
 ## Guide
 
