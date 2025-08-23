@@ -8,7 +8,8 @@
 
 > [!NOTE]
 > 本教程参考了 [backslashxx/KernelSU#5](https://github.com/backslashxx/KernelSU/issues/5) 的 syscall hook v1.4版本 钩子
-> 及 原版KSU的 [Manual Hook](https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#manually-modify-the-kernel-source)
+> 
+> 以及 原版KSU的 [Manual Hook](https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#manually-modify-the-kernel-source)
 
 ## Guide
 
@@ -167,6 +168,7 @@
 ### fstatat 钩子 ( `stat.c` )
 
 需要修改 `stat.c` 的 `newfstatat` SYSCALL 定义
+
 如果需要 32位支持 还需要修改 `statat64` SYSCALL 定义
 
 ```
