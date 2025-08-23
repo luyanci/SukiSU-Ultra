@@ -171,7 +171,7 @@
 
 如果需要 32位支持 还需要修改 `statat64` SYSCALL 定义
 
-```
+```patch
 --- a/fs/stat.c
 +++ b/fs/stat.c
 @@ -24,6 +24,10 @@
@@ -213,7 +213,7 @@
 
 需要修改 `drivers/input/input.c` 的 `input_event` 方法 而不是 `input_handle_event`
 
-```
+```patch
 --- a/drivers/input/input.c
 +++ b/drivers/input/input.c
 @@ -26,6 +26,10 @@
