@@ -4,7 +4,7 @@
 
 自commit [49b01aad](https://github.com/SukiSU-Ultra/SukiSU-Ultra/commit/49b01aad74bcca6dba5a8a2e053bb54b648eb124) 起，SukiSU 引入了 Tracepoint Hook
 
-该 Hook 理论上相比于 Manual Hook / Syscall hook ，性能开销更小
+该 Hook 理论上相比于 Kprobes Hook ，性能开销更小，但次于 Manual Hook / Syscall Hook
 
 > [!NOTE]
 > 本教程参考了 [backslashxx/KernelSU#5](https://github.com/backslashxx/KernelSU/issues/5) 的 syscall hook v1.4版本 钩子
