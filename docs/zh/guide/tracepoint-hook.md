@@ -1,13 +1,13 @@
-# tracepoint hook 集成
+# Tracepoint Hook 集成
 
 ## 介绍
 
-自commit [49b01aad](https://github.com/SukiSU-Ultra/SukiSU-Ultra/commit/49b01aad74bcca6dba5a8a2e053bb54b648eb124) 起，SukiSU 引入了 Tracepoint Hook
+自 commit [49b01aad](https://github.com/SukiSU-Ultra/SukiSU-Ultra/commit/49b01aad74bcca6dba5a8a2e053bb54b648eb124) 起，SukiSU 引入了 Tracepoint Hook
 
-该 Hook 理论上相比于 Kprobes Hook ，性能开销更小，但次于 Manual Hook / Syscall Hook
+该 Hook 理论上相比于 Kprobes Hook，性能开销更小，但次于 Manual Hook / Syscall Hook
 
 > [!NOTE]
-> 本教程参考了 [backslashxx/KernelSU#5](https://github.com/backslashxx/KernelSU/issues/5) 的 syscall hook v1.4版本 钩子 以及 原版KSU的 [Manual Hook](https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#manually-modify-the-kernel-source)
+> 本教程参考了 [backslashxx/KernelSU#5](https://github.com/backslashxx/KernelSU/issues/5) 的 syscall hook v1.4 版本钩子，以及原版 KernelSU 的 [Manual Hook](https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#manually-modify-the-kernel-source)
 
 ## Guide
 
@@ -79,7 +79,7 @@
  }
 ```
 
-如果没有 `do_faccessat` 方法，可以找 `faccessat` 的 SYSCALL 定义 (对于早于4.17的内核)
+如果没有 `do_faccessat` 方法，可以找 `faccessat` 的 SYSCALL 定义（对于早于 4.17 的内核）
 
 ```patch
 --- a/fs/open.c
@@ -107,7 +107,7 @@
 
 ###  sys_read 钩子 ( `read_write.c` )
 
-需要修改 `fs/read_write.c` 的 `sys_read` 方法 （4.19及以上）
+需要修改 `fs/read_write.c` 的 `sys_read` 方法（4.19 及以上）
 
 ```patch
 --- a/fs/read_write.c
@@ -134,7 +134,7 @@
  }
 ```
 
-或者是 `read` 的 SYSCALL 定义 （4.14及以下）
+或者是 `read` 的 SYSCALL 定义（4.14 及以下）
 
 ```patch
 --- a/fs/read_write.c
@@ -167,7 +167,7 @@
 
 需要修改 `stat.c` 的 `newfstatat` SYSCALL 定义
 
-如果需要 32位支持 还需要修改 `statat64` SYSCALL 定义
+如果需要 32 位支持，还需要修改 `statat64` SYSCALL 定义
 
 ```patch
 --- a/fs/stat.c
@@ -207,9 +207,9 @@
  		return error;
 ```
 
-### input 钩子 ( `input.c` ,用于进入KSU系的内置安全模式)
+### input 钩子 (`input.c` ,用于进入KSU系的内置安全模式)
 
-需要修改 `drivers/input/input.c` 的 `input_event` 方法 而不是 `input_handle_event`
+需要修改 `drivers/input/input.c` 的 `input_event` 方法，而不是 `input_handle_event`
 
 ```patch
 --- a/drivers/input/input.c
@@ -268,4 +268,3 @@
  	tty = devpts_get_priv(file->f_path.dentry);
  	mutex_unlock(&devpts_mutex);
 ```
-

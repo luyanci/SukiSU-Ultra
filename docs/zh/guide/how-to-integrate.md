@@ -26,7 +26,7 @@ SukiSU 可以集成到 GKI 和 non-GKI 内核中，并且已反向移植到 4.14
 
 3. **Tracepoint Hook:**
 
-   - 自SukiSU commit [49b01aad](https://github.com/SukiSU-Ultra/SukiSU-Ultra/commit/49b01aad74bcca6dba5a8a2e053bb54b648eb124) 引入的 hook 方法
+   - 自 SukiSU commit [49b01aad](https://github.com/SukiSU-Ultra/SukiSU-Ultra/commit/49b01aad74bcca6dba5a8a2e053bb54b648eb124) 引入的 hook 方法
    - 需要 `CONFIG_KSU_TRACEPOINT_HOOK=y`
    - 需要 [`guide/tracepoint-hook.md`](tracepoint-hook.md)
    
