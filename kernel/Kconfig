@@ -19,9 +19,9 @@ config KSU_DEBUG
 config KSU_MANUAL_SU
 	bool "Use manual su"
 	depends on KSU
-	default y
+	default n
 	help
-	  Use manual su and authorize the corresponding command line and application via prctl
+	  Use manual su and authorize the corresponding command line and application via prctl. (Experiment)
 
 config KPM
 	bool "Enable SukiSU KPM"
